@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Wallet extends Model
 {
-    /*
+    /**
      * $fillable = variavel que mapeia as colunas da table que a model faz referencia
      */
     protected $fillable = [
@@ -15,7 +15,7 @@ class Wallet extends Model
         'user_id',
     ];
 
-    /*
+    /**
      * user()
      * mapeamento de relacionamento que define o dono da carteira
      */

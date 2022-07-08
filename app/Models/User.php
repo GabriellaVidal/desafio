@@ -10,7 +10,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 class User extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
-    /*
+    /**
      * $fillable = variavel que mapeia as colunas da table que a model faz referencia
      */
     protected $fillable = [
@@ -21,7 +21,13 @@ class User extends Authenticatable implements JWTSubject
         'profile_id',
     ];
 
-    /*
+    public function scopeBuscaBeneficiario($query, $payee){
+        return $query->where('email', $payee)
+                     ->orWhere('cpf', $payee)
+                     ->orWhere('cnpj', $payee);
+    }
+
+    /**
      * profile()
      * mapeamento de relacionamento que define o tipo de usuario
      */
@@ -30,7 +36,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo(Profile::class, 'profile_id');
     }
 
-    /*
+    /**
      * wallet()
      * mapeamento de relacionamento que define a carteira
      */
@@ -39,7 +45,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Wallet::class, 'user_id');
     }
 
-    /*
+    /**
      * user()
      * mapeamento de relacionamento que define as transacoes que este usuario foi pagador
      */
@@ -48,7 +54,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Transaction::class, 'payer_id');
     }
 
-    /*
+    /**
      * user()
      * mapeamento de relacionamento que define as transacoes que este usuario foi beneficiario
      */
@@ -57,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Transaction::class, 'payee_id');
     }
 
-    /*
+    /**
      * implementacao metodos jwt
      */
     public function getJWTIdentifier()
