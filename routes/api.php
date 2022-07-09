@@ -19,8 +19,4 @@ Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login'])->n
 //Route::middleware('token')->group(function (){
 Route::middleware('jwt.auth')->group(function (){
     Route::post('/pix', [\App\Http\Controllers\API\TransactionController::class, 'pix']);
-
-    Route::get('/user', function (Request $request) {
-        return $request->user();
-    });
 });
