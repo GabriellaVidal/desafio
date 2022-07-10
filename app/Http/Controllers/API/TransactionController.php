@@ -76,7 +76,7 @@ class TransactionController extends Controller
         $amount_payee = $wallet_payee->amount;
 
         try {
-            return DB::transaction(function () use ($result, $wallet_payer, $wallet_payee) {
+            DB::transaction(function () use ($result, $wallet_payer, $wallet_payee) {
                 $response_autorrized = self::authorizing();
 
                 if(!isset($response_autorrized->message) || $response_autorrized->message !== "Autorizado" || empty($response_autorrized)) {
@@ -106,12 +106,12 @@ class TransactionController extends Controller
     {
         try {
             return DB::transaction(function () use ($result, $wallet_payer, $wallet_payee, $amount_payer, $amount_payee) {
-                if ($amount_payer < $result->payer->wallet->amount) {
-                    $result->payer->wallet()->update(["amount" => $wallet_payer->amount + $result->value]);//voltando o pagador
+                if ($amount_payer <= $result->payer->wallet->amount) {
+                    $result->payer->wallet()->update(["amount" => $amount_payer]);//voltando o pagador
                 }
 
-                if ($amount_payee > $result->payee->wallet->amount) {
-                    $result->payee->wallet()->update(["amount" => $wallet_payee->amount - $result->value]);//voltando o beneficiario
+                if ($amount_payee >= $result->payee->wallet->amount) {
+                    $result->payee->wallet()->update(["amount" => $amount_payee]);//voltando o beneficiario
                 }
 
                 $result->update(['concluded' => 0]);
