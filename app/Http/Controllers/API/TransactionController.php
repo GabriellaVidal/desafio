@@ -54,14 +54,12 @@ class TransactionController extends Controller
 
                 $result = $this->model->create($dados);
 
-                if (!empty($result))
-                {
+                if (!empty($result)) {
                     $efetivation = self::efetivation($result);
 
                     return $efetivation;
                 }
 
-//                return $this->success($result->id, "Success");
             });
         } catch (\Exception $e) {
             $this->codeError(500);
@@ -81,8 +79,7 @@ class TransactionController extends Controller
             return DB::transaction(function () use ($result, $wallet_payer, $wallet_payee) {
                 $response_autorrized = self::authorizing();
 
-                if(!isset($response_autorrized->message) || $response_autorrized->message !== "Autorizado" || empty($response_autorrized))
-                {
+                if(!isset($response_autorrized->message) || $response_autorrized->message !== "Autorizado" || empty($response_autorrized)) {
                     $this->codeError(401);
                     return $this->error("Error autorizacao");
                 }
@@ -92,8 +89,7 @@ class TransactionController extends Controller
 
                 $result->update(['concluded' => 1]);
 
-                if ($result->concluded)
-                {
+                if ($result->concluded) {
                     Notification::dispatch();
                 }
 
@@ -130,8 +126,7 @@ class TransactionController extends Controller
     {
         $response = Http::get('https://run.mocky.io/v3/8fafdd68-a090-496f-8c9a-3442cf30dae6');
 
-        if($response->failed())
-        {
+        if($response->failed()) {
             $this->codeError(401);
             return $this->error("Error autorização");
         }
